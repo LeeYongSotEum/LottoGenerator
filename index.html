@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
+		<meta name='viewport' content='width=device-width, initial-scale=1.0' charset="UTF-8">
 		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
 		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'/>
 		<script src='maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
@@ -13,16 +13,11 @@
 					CSV File to HTML
 				</h1>
 				<br/>
-				<div class ='container'>
-					<P>
-					<!-- Lotto Number : {{testDataHtml}} -->
-					</P>
-					<!-- <ul>
-					{% for value in testDataHtml %}
-					<li>{{value}}</li>
-					{% endfor %}
-					</ul>	 -->
-				</div>
+				<!-- <div class ='container'> -->
+					<!-- <P>
+					Lotto Number : {{my_str}}
+					</P> -->
+				<!-- </div> -->
 				<br/>
 				<div align='center'>
 					<button type='button' name='load_data' id='load_data' class='btn btn-info'>
@@ -32,8 +27,8 @@
 						Generate Number
 					</button>
 				</div>
-				<div id='lotto_data'></div>
 				<div id='num_arr'></div>
+				<div id='lotto_data'></div>
 				
 			</div>
 		</div>
@@ -44,7 +39,7 @@
 $(document).ready(function(){
 	$('#load_data').click(function(){
 		$.ajax({
-			url:"lotto_data_train.csv",
+			url:"input/lotto_data_train.csv",
 			dataType:"text",
 			success:function(data){
 				var lotto_data = data.split(/\r?\n|\r/);
@@ -72,31 +67,37 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
 	$('#generate_number').click(function(){
-		var numbers = new Array();
-		var td_num1 = document.getElementById('lotto_table').querySelectorAll("tr td:nth-child(2)");
-		for (var i=0; i < td_num1.length; ++i) {
-			var num1 = td_num1[i].textContent;
-			numbers.push(num1)
+		var numberList = new Array();
+		for(var idx=2; idx<9; ++idx) {
+			var numbers = new Array();
+			var td_num = document.getElementById('lotto_table').querySelectorAll("tr td:nth-child("+idx+")");
+			for (var i=0; i < td_num.length; ++i) {
+				var num = td_num[i].textContent;
+				numbers.push(num);
+			}
+			var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
+			if (idx<9) {
+				if (idx==2){
+					numberList.push(randomNumbers+" ");
+				}
+				else {
+					while(1){
+						var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
+						if (numberList[numberList.length-1] >= randomNumbers) {
+							continue;
+						}
+						else if (numberList[numberList.length-1] < randomNumbers) {
+							numberList.push(randomNumbers+" ");
+							break;
+						}
+					}
+				}
+			}
+			else if (idx==9) {
+				numberList.push(randomNumbers+" ");
+			}
 		}
-
-		var result = new Array();
-
-		numbers.sort();
-
-		for(var value in numbers) {
-			var index = numbers[value];
-			result[index] = result[index] == undefined ? 1 : result[index] += 1;
-		}        
-		
-		for(var value in result) {
-			result[value] /= td_num1.length;
-			
-		}
-
-		for(var value in result) {
-			document.writeln(value+"의 확률 : "+result[value]);
-			// $('#num_arr').html(value + "의 중복 개수 : " + result[value]);
-		}
+		$('#num_arr').html(numberList)
 	})
 })
 </script>
