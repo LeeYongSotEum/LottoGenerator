@@ -27,9 +27,10 @@
 						Generate Number
 					</button>
 				</div>
+				<br/>
 				<div id='num_arr'></div>
+				<br/>
 				<div id='lotto_data'></div>
-				
 			</div>
 		</div>
 	</body>
@@ -68,35 +69,48 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$('#generate_number').click(function(){
 		var numberList = new Array();
+		
 		for(var idx=2; idx<9; ++idx) {
 			var numbers = new Array();
 			var td_num = document.getElementById('lotto_table').querySelectorAll("tr td:nth-child("+idx+")");
-			for (var i=0; i < td_num.length; ++i) {
+			for (var i=0; i < td_num.length; i++) {
 				var num = td_num[i].textContent;
 				numbers.push(num);
 			}
 			var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
-			if (idx<9) {
+			if (idx<8) {
 				if (idx==2){
 					numberList.push(randomNumbers+" ");
 				}
 				else {
+					last_num = numberList.slice(-1)[0];
 					while(1){
-						var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
-						if (numberList[numberList.length-1] >= randomNumbers) {
+						// if (numberList[numberList.length-1] >= randomNumbers) {
+						// 	var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
+						// 	continue;
+						// }
+						// else if (numberList[numberList.length-1] < randomNumbers) {
+						// 	numberList.push(randomNumbers+" ");
+						// 	break;
+						// }
+						if (last_num >= randomNumbers) {
+							var randomNumbers = 0;
+							var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
 							continue;
 						}
-						else if (numberList[numberList.length-1] < randomNumbers) {
+						else if (last_num < randomNumbers) {
 							numberList.push(randomNumbers+" ");
 							break;
 						}
 					}
+					// numberList.push(randomNumbers+" ");
 				}
 			}
-			else if (idx==9) {
+			else if (idx==8) {
 				numberList.push(randomNumbers+" ");
 			}
 		}
+		// alert('AAA')
 		$('#num_arr').html(numberList)
 	})
 })
