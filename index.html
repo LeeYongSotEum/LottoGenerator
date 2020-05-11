@@ -4,8 +4,10 @@
 		<meta name='viewport' content='width=device-width, initial-scale=1.0' charset="UTF-8">
 		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
 		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'/>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="style.css"/>
 		<script src='maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+		<link rel="shortcut icon" href="favicon.ico"/ type="image/x-icon">
+		<title>로또번호</title>
 	</head>
 	<body>
 		<div class='container'>
@@ -13,6 +15,7 @@
 				<h1 align='center'>
 					로또 번호
 				</h1>
+				<br/>
 				<div align='center'>
 					<!-- <button type='button' name='load_data' id='load_data' class='btn btn-info'>
 						Load Data
@@ -22,6 +25,7 @@
 					</button>
 				</div>
 				<br/>
+				<br/>
 				<p align='center'>
 					<span class="ball_645 lrg ball1" id='num1'></span>
 					<span class="ball_645 lrg ball2" id='num2'></span>
@@ -30,41 +34,10 @@
 					<span class="ball_645 lrg ball4" id='num5'></span>
 					<span class="ball_645 lrg ball4" id='num6'></span>
 				</p>
-				<!-- <div align='center' id='num_arr'></div> -->
-				<!-- <div id='lotto_data'></div> -->
 			</div>
 		</div>
 	</body>
 </html>
-<!-- <script>
-$(document).ready(function(){
-	$('#load_data').click(function(){
-		$.ajax({
-			url:"input/lotto_data_train.csv",
-			dataType:"text",
-			success:function(data){
-				var lotto_data = data.split(/\r?\n|\r/);
-				var table_data = '<table id="lotto_table" class="table table-bordered table-striped">';
-				for(var count=0; count < lotto_data.length; count++){
-					var cell_data = lotto_data[count].split(",");
-					table_data += '<tr>';
-					for(var cell_count=0; cell_count < cell_data.length; cell_count++){
-						if(count === 0){
-							table_data += '<th>'+cell_data[cell_count]+'</th>';
-						}
-						else{
-							table_data += '<td>'+cell_data[cell_count]+'</td>';
-						}
-					}
-					table_data += '</tr>';
-				}
-				table_data += '</table>';
-				$('#lotto_data').html(table_data)
-			}
-		});
-	});
-});
-</script> -->
 <script>
 $(document).ready(function(){
 	$('#generate_number').click(function(){
@@ -119,18 +92,6 @@ $(document).ready(function(){
 						var randomNumbers = compare_num_arr[Math.floor(Math.random() * compare_num_arr.length)];
 						numberList.push(randomNumbers+" ");
 					}
-					// else if(idx==6) {
-					// 	var randomNumbers = lotto_col_list[idx][Math.floor(Math.random() * lotto_col_list[idx].length)];
-					// 	var TF = 0;
-					// 	var i = numberList.length
-					// 	while(i--) {
-					// 		if(numberList[i] === randomNumbers){
-					// 			var randomNumbers = lotto_col_list[idx][Math.floor(Math.random() * lotto_col_list[idx].length)];
-					// 			i == numberList.length
-					// 		}
-					// 	}
-					// 	numberList.push(randomNumbers+" ");
-					// }
 				}
 				
 				$('#num1').html(numberList[0])
@@ -144,44 +105,3 @@ $(document).ready(function(){
 	})
 })
 </script>
-<!-- <script>
-	let lotto_data_Array = [];
-	
-	function getAsText(fileToRead){
-		let reader = new FileReader();
-		reader.readAsText(fileToRead);
-		reader.onload = loadHandler;
-		reader.onerror = errorHandler;
-	}
-	
-	function handleFiles(files){
-		if(window.FileReader){
-			getAsText(files[0]);
-		} else {
-			alert('FileReader not supported in browser.')
-		}
-	}
-	
-	function loadHandler(event) {
-		let csv = event.target.result;
-		processData(csv);
-	}
-	
-	function errorHandler(evt) {
-		if (evt.target.error.name == "NotReadableError") {
-			alert('Cannot read file')
-		}
-	}
-	
-	function processData(csv) {
-		let allTextLines = csv.split(/\r?\n|\r/);
-		for(let i=0; i<allTextLines.length; i++){
-			let row = allTextLines[i].split(';');
-			let col = [];
-			for(let j=0; j<row.length; j++){
-				col.push(row[j]);
-			}
-			lotto_data_Array.push(col)
-		}
-	}
-</script> -->
