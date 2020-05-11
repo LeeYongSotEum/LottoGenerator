@@ -4,39 +4,39 @@
 		<meta name='viewport' content='width=device-width, initial-scale=1.0' charset="UTF-8">
 		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
 		<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'/>
+		<link rel="stylesheet" href="style.css">
 		<script src='maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
 	</head>
 	<body>
 		<div class='container'>
 			<div class='table-responsive'>
 				<h1 align='center'>
-					CSV File to HTML
+					로또 번호
 				</h1>
-				<br/>
-				<!-- <div class ='container'> -->
-					<!-- <P>
-					Lotto Number : {{my_str}}
-					</P> -->
-				<!-- </div> -->
-				<br/>
 				<div align='center'>
-					<button type='button' name='load_data' id='load_data' class='btn btn-info'>
+					<!-- <button type='button' name='load_data' id='load_data' class='btn btn-info'>
 						Load Data
-					</button>
+					</button> -->
 					<button type='button' name='generate_number' id='generate_number' class='btn btn-info'>
-						Generate Number
+						번호 생성
 					</button>
 				</div>
 				<br/>
-				<div id='num_arr'></div>
-				<br/>
-				<div id='lotto_data'></div>
+				<p align='center'>
+					<span class="ball_645 lrg ball1" id='num1'></span>
+					<span class="ball_645 lrg ball2" id='num2'></span>
+					<span class="ball_645 lrg ball2" id='num3'></span>
+					<span class="ball_645 lrg ball3" id='num4'></span>
+					<span class="ball_645 lrg ball4" id='num5'></span>
+					<span class="ball_645 lrg ball4" id='num6'></span>
+				</p>
+				<!-- <div align='center' id='num_arr'></div> -->
+				<!-- <div id='lotto_data'></div> -->
 			</div>
 		</div>
 	</body>
 </html>
-
-<script>
+<!-- <script>
 $(document).ready(function(){
 	$('#load_data').click(function(){
 		$.ajax({
@@ -64,54 +64,124 @@ $(document).ready(function(){
 		});
 	});
 });
-</script>
+</script> -->
 <script>
 $(document).ready(function(){
 	$('#generate_number').click(function(){
-		var numberList = new Array();
-		
-		for(var idx=2; idx<9; ++idx) {
-			var numbers = new Array();
-			var td_num = document.getElementById('lotto_table').querySelectorAll("tr td:nth-child("+idx+")");
-			for (var i=0; i < td_num.length; i++) {
-				var num = td_num[i].textContent;
-				numbers.push(num);
-			}
-			var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
-			if (idx<8) {
-				if (idx==2){
-					numberList.push(randomNumbers+" ");
-				}
-				else {
-					last_num = numberList.slice(-1)[0];
-					while(1){
-						// if (numberList[numberList.length-1] >= randomNumbers) {
-						// 	var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
-						// 	continue;
-						// }
-						// else if (numberList[numberList.length-1] < randomNumbers) {
-						// 	numberList.push(randomNumbers+" ");
-						// 	break;
-						// }
-						if (last_num >= randomNumbers) {
-							var randomNumbers = 0;
-							var randomNumbers = numbers[Math.floor(Math.random() * numbers.length)];
-							continue;
-						}
-						else if (last_num < randomNumbers) {
-							numberList.push(randomNumbers+" ");
-							break;
-						}
+		$.ajax({
+			url:"input/lotto_data_train.csv",
+			dataType:"text",
+			success:function(data){
+				let lotto_data_Array = [];
+				let num1 = [];
+				let num2 = [];
+				let num3 = [];
+				let num4 = [];
+				let num5 = [];
+				let num6 = [];
+				let bonus = [];
+				var allTextLines = data.split(/\r?\n|\r/);
+				for(let i=1; i<allTextLines.length; i++){
+					let row = allTextLines[i].split(',');
+					let col = [];
+					for(let j=0; j<row.length; j++){
+						col.push(Number(row[j]));
 					}
-					// numberList.push(randomNumbers+" ");
+					lotto_data_Array.push(col)
 				}
+				for(var i=0; i<lotto_data_Array.length; i++){
+					num1.push(lotto_data_Array[i][1]);
+					num2.push(lotto_data_Array[i][2]);
+					num3.push(lotto_data_Array[i][3]);
+					num4.push(lotto_data_Array[i][4]);
+					num5.push(lotto_data_Array[i][5]);
+					num6.push(lotto_data_Array[i][6]);
+					bonus.push(lotto_data_Array[i][7]);
+				}
+				
+				let lotto_col_list = [num1, num2, num3, num4, num5, num6, bonus];
+
+				var numberList = [];
+				
+				for(var idx=0; idx<6; idx++) {
+					if(idx==0){
+						var randomNumbers = lotto_col_list[idx][Math.floor(Math.random() * lotto_col_list[idx].length)];
+						numberList.push(randomNumbers+" ");
+					}
+					else {
+						var last_num = numberList[numberList.length-1];
+						var compare_num_arr = [];
+						for(var i = 0; i < lotto_col_list[idx].length; i++) {
+							if(Number(lotto_col_list[idx][i]) > Number(last_num)) {
+								compare_num_arr.push(lotto_col_list[idx][i])
+							}
+						}
+						var randomNumbers = compare_num_arr[Math.floor(Math.random() * compare_num_arr.length)];
+						numberList.push(randomNumbers+" ");
+					}
+					// else if(idx==6) {
+					// 	var randomNumbers = lotto_col_list[idx][Math.floor(Math.random() * lotto_col_list[idx].length)];
+					// 	var TF = 0;
+					// 	var i = numberList.length
+					// 	while(i--) {
+					// 		if(numberList[i] === randomNumbers){
+					// 			var randomNumbers = lotto_col_list[idx][Math.floor(Math.random() * lotto_col_list[idx].length)];
+					// 			i == numberList.length
+					// 		}
+					// 	}
+					// 	numberList.push(randomNumbers+" ");
+					// }
+				}
+				
+				$('#num1').html(numberList[0])
+				$('#num2').html(numberList[1])
+				$('#num3').html(numberList[2])
+				$('#num4').html(numberList[3])
+				$('#num5').html(numberList[4])
+				$('#num6').html(numberList[5])
 			}
-			else if (idx==8) {
-				numberList.push(randomNumbers+" ");
-			}
-		}
-		// alert('AAA')
-		$('#num_arr').html(numberList)
+		});
 	})
 })
 </script>
+<!-- <script>
+	let lotto_data_Array = [];
+	
+	function getAsText(fileToRead){
+		let reader = new FileReader();
+		reader.readAsText(fileToRead);
+		reader.onload = loadHandler;
+		reader.onerror = errorHandler;
+	}
+	
+	function handleFiles(files){
+		if(window.FileReader){
+			getAsText(files[0]);
+		} else {
+			alert('FileReader not supported in browser.')
+		}
+	}
+	
+	function loadHandler(event) {
+		let csv = event.target.result;
+		processData(csv);
+	}
+	
+	function errorHandler(evt) {
+		if (evt.target.error.name == "NotReadableError") {
+			alert('Cannot read file')
+		}
+	}
+	
+	function processData(csv) {
+		let allTextLines = csv.split(/\r?\n|\r/);
+		for(let i=0; i<allTextLines.length; i++){
+			let row = allTextLines[i].split(';');
+			let col = [];
+			for(let j=0; j<row.length; j++){
+				col.push(row[j]);
+			}
+			lotto_data_Array.push(col)
+		}
+	}
+</script> -->
