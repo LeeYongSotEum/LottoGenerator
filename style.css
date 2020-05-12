@@ -545,3 +545,28 @@ table tr td .ball_645.sml {margin:0 3px}
 .tbl_total_account_number_top tr th {padding:4px 0 4px; text-align:left; vertical-align:top; font-weight:normal; line-height:1.3em;}
 .tbl_total_account_number_top tr td {padding:5px 0; font-weight:300; color:#767676;}
 .tbl_total_account_number_top tr td .brk ~ .brk {margin-top:5px}
+
+html, body {
+	height: 100%;
+	margin: 0;
+}
+.content {
+	min-height: 100%;
+}
+.content-inside {
+	padding: 20px;
+	padding-bottom: 50px;
+}
+.footer {
+	text-align:center;
+	height: 50px;
+	margin-top: -50px;
+}
+.ad-banner {
+	width:320px;
+	margin:0 auto;
+}
+.ad-banner1 {
+	width:728px;
+	margin:0 auto;
+}
